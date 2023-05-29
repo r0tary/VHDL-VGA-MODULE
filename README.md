@@ -2,8 +2,11 @@
 A VGA driver written in VHDL for displaying a 640x480 image on a VGA supported monitor, with an example drawing included.
 
 ## Project Description
-The module consists of 2 main parts: generating the necessary timings like ***Hsync*** and ***Vsync***, done in [VGA_timing.vhd]() and generating the necessary output pattern to the display [pattern_generator.vhd](). Currently the module only supports the basic 640x480 resolution at 60Hz, which needs 25MHz to drive, the conversion is done in [clock_div.vhd]().
+[Design_TB_Sources]() contains the design and simulation sources for this project. [VGA-MODULE-proj]() contains the Vivado Project. While developing this project I used [VHDL Display Simulator](https://github.com/fcayci/vhdl-display-simulator) made by [fcayci](https://github.com/fcayci)
 
+The module is split into 3 design sources: a 100MHz to 25Mhz clock divider done in [clock_div.vhd]()  generating the necessary timings like ***Hsync*** and ***Vsync***, done in [VGA_timing.vhd]() and generating the necessary output pattern to the display [pattern_generator.vhd](). Currently the module only supports the basic 640x480 resolution at 60Hz, which needs the 25MHz clock signal to drive it.
+
+The hierchry for the design sources in Vivado:
 ```
 +- Design Sources/          
 | -- Video_Top.vhd           : Top File
@@ -12,10 +15,21 @@ The module consists of 2 main parts: generating the necessary timings like ***Hs
   | -- pattern_genrator.vhd  : Output image generation
 +- Simulation Sources
 | -- VGA_Module_tb.vhd       : Main simulation/testbench file, tests above 3 entitys
++- Constraints
+| -- Zedbaord_master.xdc
 ```
 --
-## Simulations
+## Simulation
+[VGA_Module_tb]() has a slightly modified process used for writting RGB values into a text document, this is used by the [Display-Simulator]()
 
+Below is a screenshot of a simulation depicting signals
+![image](https://github.com/r0tary/VHDL-VGA-MODULE/assets/106680433/991c484a-68d0-4402-b3bd-a732edab9c3a)
+
+Below is a screnshot of the current example object drawn and simulated by the [Display-Simulator.html]()
+
+<p align="center">
+  <img width="460" height="300" src="https://github.com/r0tary/VHDL-VGA-MODULE/assets/106680433/b888b2b9-9c47-40f5-9592-82489e506a64">
+</p>
 
 ---
 
