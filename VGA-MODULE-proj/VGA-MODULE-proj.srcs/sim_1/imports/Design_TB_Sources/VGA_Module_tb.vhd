@@ -58,7 +58,7 @@ architecture Behavioral of VGA_tb is
             Ypos: out integer;
             Hsync: inout std_logic; 
             Vsync: out std_logic;                     
-            videoOn: out std_logic                     
+            videoOn: inout std_logic                     
         );
     end component;
     
@@ -93,10 +93,15 @@ architecture Behavioral of VGA_tb is
     signal B_switch: std_logic := '1';
     
     --25MHz clock
-    signal clk_25: std_logic := '1'; 
+    signal clk_25: std_logic := '0'; 
     
     --100MHz clock period
     constant clock_period: time := 10ns;
+    
+    --Signals used by record_values
+    signal FRAME_NUM: integer := 1;     --keeps track of the current frame
+    signal FRAME_TARGET: integer := 7;  --Which frame you want to simulate
+    signal toggle: std_logic := '0';    --Keeps track of Vsync
         
 begin
     
@@ -121,30 +126,45 @@ begin
         wait for clock_period/2;
     end process;
     
+    --clock_25:process
+    --begin
+        --clk_25 <= '0';
+        --wait for 20ns;
+        --clk_25 <= '1';
+        --wait for 20ns;
+    --end process;
+    
  --write RGB values in a text document
     record_values:process(clk_25) is
         file     DISP_FILE : text open write_mode is "rgb.txt";
         variable DISP_LINE : line;
         variable h : std_logic := '0';
+        
     begin
         if rising_edge(clk_25) then
-            if video_active = '1' then
-                write(DISP_LINE, to_integer(unsigned(RGB)));
-                write(DISP_LINE, ',');
-                h := '1';
-            end if;
+            if ((FRAME_NUM = FRAME_TARGET) and (toggle = '0')) then
+                if video_active = '1' then
+                    write(DISP_LINE, to_integer(unsigned(RGB)));
+                    write(DISP_LINE, ',');
+                    h := '1';
+                end if;
 
-            if hsync = '0' and h = '1' then
-                h := '0';
-                writeline(DISP_FILE, DISP_LINE);
-            end if;
+                if hsync = '0' and h = '1' then
+                    h := '0';
+                    writeline(DISP_FILE, DISP_LINE);
+                end if;
             
-            if vsync = '0' then
-                assert false report "completed...ignore following error messages" severity FAILURE;
+                if (vsync = '0') then
+                    assert false report "completed...ignore following error messages" severity FAILURE;
+                end if;
+                
+            elsif ((FRAME_NUM /= FRAME_TARGET) AND (vsync = '0') AND (toggle = '0')) then
+                toggle <= '1';
+            elsif ((vsync = '1') AND (toggle = '1')) then
+                toggle <= '0';
+                FRAME_NUM <= FRAME_NUM + 1;
             end if;
         end if;
-    end process;
-   
-    
+    end process;    
    
 end Behavioral;

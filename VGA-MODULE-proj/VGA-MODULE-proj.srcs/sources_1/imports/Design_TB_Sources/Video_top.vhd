@@ -58,7 +58,7 @@ architecture Behavioral of Video_top is
             Ypos: out integer;
             Hsync: inout std_logic; 
             Vsync: out std_logic;                     
-            videoOn: out std_logic                     
+            videoOn: inout std_logic                     
         );
     end component;
     

@@ -44,7 +44,7 @@ entity VGA is
         Ypos: out integer range 0 to 480-1;
         Hsync: inout std_logic; 
         Vsync: out std_logic;                       -- Horizontal and Vertical sync
-        videoOn: out std_logic                      -- Indicates if hPos and vPos are in drawable area
+        videoOn: inout std_logic                      -- Indicates if hPos and vPos are in drawable area
     );                    
 end VGA;
 
