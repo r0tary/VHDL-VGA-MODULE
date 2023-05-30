@@ -2,9 +2,9 @@
 A VGA driver written in VHDL for displaying a 640x480 image on a VGA supported monitor, with an example drawing included.
 
 ## Project Description
-[Design_TB_Sources]() contains the design and simulation sources for this project. [VGA-MODULE-proj]() contains the Vivado Project. While developing this project I used [VHDL Display Simulator](https://github.com/fcayci/vhdl-display-simulator) made by [fcayci](https://github.com/fcayci)
+[Design_TB_Sources]() contains the design and simulation sources for this project. [VGA-MODULE-proj]() contains a Vivado Project design for a Zedboard FPGA. While developing this project I used [VHDL Display Simulator](https://github.com/fcayci/vhdl-display-simulator) made by [fcayci](https://github.com/fcayci)
 
-The module is split into 3 design sources: a 100MHz to 25Mhz clock divider done in [clock_div.vhd]()  generating the necessary timings like ***Hsync*** and ***Vsync***, done in [VGA_timing.vhd]() and generating the necessary output pattern to the display [pattern_generator.vhd](). Currently the module only supports the basic 640x480 resolution at 60Hz, which needs the 25MHz clock signal to drive it.
+The module is split into 3 design sources with one TOP file: a 100MHz to 25Mhz clock divider done in [clock_div.vhd]()  generating the necessary timings like ***Hsync*** and ***Vsync***, done in [VGA_timing.vhd]() and generating the necessary output pattern to the display [pattern_generator.vhd](). Currently the module only supports the basic 640x480 resolution at 60Hz, which needs the 25MHz clock signal to drive it.
 
 The hierchry for the design sources in Vivado:
 ```
